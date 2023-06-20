@@ -149,7 +149,16 @@ class AuthController {
         return null;
     }
 
+    async updateSettings( req, res, next ) {
+        try{
+            const id = req.user.userId;
+            await this.service.updateSettings( id, req.body );
+            res.sendCalmResponse( null, { 'updated': true } );
 
+        } catch ( e ) {
+            next( e );
+        }
+    }
 }
 
 module.exports = new AuthController( authService );

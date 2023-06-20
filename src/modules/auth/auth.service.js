@@ -177,6 +177,36 @@ class AuthService {
         return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
     }
 
+    validateAppSettings( jsonData ) {
+        const requiredFields = [
+            'subscription',
+            'userPreferences',
+            'brokerAPI',
+            'codeEditor',
+            'dataProvider'
+        ];
+        
+        try {
+            const data = JSON.parse( jsonData );
+            for ( const field of data ) {
+                if ( !requiredFields.includes( field ) ) {
+                    throw new CalmError('VALIDATION_ERROR', `Invalid Settings ${field}}`);
+                }
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+    async updateSettings( id, data ) {
+        try {
+        // validate json file before saving
+            this.validateAppSettings( data );
+            return await this.userService.updateSettings( id, data );
+        } catch ( error ) {
+            throw error;
+        }
+    }
+
 }
 
 module.exports = { AuthService };

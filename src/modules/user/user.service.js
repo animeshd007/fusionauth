@@ -50,6 +50,15 @@ class UserService extends CalmService {
         }
         return { data };
     }
+    async updateSettings( id, data ) {
+        try {
+            const user = await this.model.findOneAndUpdate( { userId : id}, data, { returnNewDocument: true, upsert: true} );
+
+            return { 'updated': user };
+        } catch ( errors ) {
+            throw errors;
+        }
+    }
 }
 
 module.exports = { UserService };

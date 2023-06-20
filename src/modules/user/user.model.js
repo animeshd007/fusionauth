@@ -20,22 +20,27 @@ class User {
                 'lowercase': true,
                 'trim': true
             },
-            'password': {
-                'type': String,
-                'required': true,
-                'select': false
-            },
-            'status': {
-                'type': Boolean,
-                'required': true,
-                'default': true
-            },
+
+            // 'status': {
+            //     'type': Boolean,
+            //     'required': true,
+            //     'default': true
+            // },
             'otp': {
                 'type': String
             },
             'otpExpiry': {
                 'type': Date
+            },
+            'settings': {
+                'type': Object,
+            },
+            'userId': {
+                type: String,
+                required: true,
             }
+      
+
         }, { 'timestamps': true } );
 
 
