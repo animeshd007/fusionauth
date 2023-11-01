@@ -4,6 +4,7 @@ const autoBind = require( 'auto-bind' );
 const mongoose = require( 'mongoose' );
 const { CalmError } = require('../../../system/core/CalmError');
 // const { FusionAuthClient } = require('@fusionauth/node-client');
+const axios = require('axios');
 class AuthService {
     constructor( model, userModel ) {
         this.model = model;
@@ -59,9 +60,30 @@ class AuthService {
 
     async register( data ) {
         try {
+
             const userData = await this.userService.insert( data );
-            return { 'data': userData.data };
+            const register = await axios.post(`${process.env.FUSION_BASE_URL}/api/user/registration/${userData._id}`,
+                {
+                    'registration': {
+                        'applicationId': process.env.APPLICATION_ID
+                    },
+                    'user': {
+                        'email': userData.email,
+                        'fullName': userData.name,
+                        'password': data.password,
+                    }
+                },
+                {
+                    headers: {
+                        'Authorization': process.env.FUSION_AUTH_API_KEY,
+                    }
+                });
+
+            return { 'data': register.data.user };
         } catch ( error ) {
+            if( error?.response?.status === 400 ) {
+                return { error: e.response.status, data: e.response.data };
+            }
             throw error;
         }
     }

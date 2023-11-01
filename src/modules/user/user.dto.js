@@ -11,7 +11,7 @@ class GetDTO {
 class InsertDTO {
     constructor( { ...props } ) {
         this.email = props.email;
-        this.password = props.password;
+        // this.password = props.password;
         this.name = props.name;
         Object.freeze( this );
     }
